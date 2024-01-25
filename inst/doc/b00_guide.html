@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Plotting with unigd</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Plotting with unigd</h1>
+
+
+
+<p>The following guide walks through the basic features of
+<code>unigd</code> and compares them with the plot rendering methods in
+base R.</p>
+<div id="plot-rendering-in-base-r" class="section level2">
+<h2>Plot rendering in base R</h2>
+<p>Rendering a plot in base R is done by (1) starting a graphics device,
+(2) calling some plot functions and subsequently (3) closing the
+device:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>temp <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Temp                         <span class="co"># Fetch some data</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">png</span>(<span class="at">file=</span><span class="st">&quot;my_plot1.png&quot;</span>, <span class="at">width=</span><span class="dv">600</span>, <span class="at">height=</span><span class="dv">400</span>) <span class="co"># (1) Start the &#39;png&#39; device</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">hist</span>(temp, <span class="at">col=</span><span class="st">&quot;darkblue&quot;</span>)                      <span class="co"># (2) Plot a histogram</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">dev.off</span>()                                       <span class="co"># (3) Close the device</span></span></code></pre></div>
+<p>Note that this has some unfortunate constraints:</p>
+<ul>
+<li>Rendering information must be specified <em>before</em> the plot is
+created
+<ul>
+<li>File format (<code>png()</code>, <code>pdf()</code>,
+<code>svg()</code>, …)</li>
+<li>Filepath (i.e.: <code>file=&quot;my_plot1.png&quot;</code>)</li>
+<li>Dimensions (i.e.: <code>width=600, height=400</code>)</li>
+</ul></li>
+<li>There is no way (without re-running the plotting code) to render the
+plot…
+<ul>
+<li>…in multiple formats.</li>
+<li>…in multiple dimensions.</li>
+</ul></li>
+<li>No easy way to access the plotting data without writing to a file
+first.</li>
+<li>Closing the device with <code>dev.off()</code> must be called every
+time.</li>
+</ul>
+<p><code>unigd</code> solves these issues by employing a different
+graphics device architecture.</p>
+</div>
+<div id="plot-rendering-with-unigd" class="section level2">
+<h2>Plot rendering with <code>unigd</code></h2>
+<p>Let’s see how the same render can be created using
+<code>unigd</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(unigd)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>temp <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Temp                              <span class="co"># Fetch some data</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">ugd</span>()                                                <span class="co"># (1) Start the &#39;ugd&#39; device</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">hist</span>(temp, <span class="at">col=</span><span class="st">&quot;darkblue&quot;</span>)                           <span class="co"># (2) Plot a histogram</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;my_plot1.png&quot;</span>, <span class="at">width=</span><span class="dv">600</span>, <span class="at">height=</span><span class="dv">400</span>) <span class="co"># Render 600*400 PNG file</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">dev.off</span>()                                            <span class="co"># (3) Close the device</span></span></code></pre></div>
+<p>Notice how rendering is an explicit instruction <em>after</em>
+plotting when using unigd. This way we can also render the same plot to
+multiple formats and/or dimensions:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># ...</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">hist</span>(temp, <span class="at">col=</span><span class="st">&quot;darkblue&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;my_plot1.png&quot;</span>, <span class="at">width=</span><span class="dv">600</span>, <span class="at">height=</span><span class="dv">400</span>) <span class="co"># Render 600*400 PNG file</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;my_plot2.pdf&quot;</span>, <span class="at">width=</span><span class="dv">300</span>, <span class="at">height=</span><span class="dv">300</span>) <span class="co"># Render 300*300 PDF file</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co"># ...</span></span></code></pre></div>
+<p>Starting and closing a device can be cumbersome, especially if the
+plotting code aborts after an error and leaves the device open. For this
+reason <code>unigd</code> comes with a set of functions called
+<code>ugd_*_inline</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(unigd)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>temp <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Temp <span class="co"># Fetch some data</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">ugd_save_inline</span>({</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="fu">hist</span>(temp, <span class="at">col=</span><span class="st">&quot;darkblue&quot;</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>}, <span class="at">file=</span><span class="st">&quot;my_plot1.png&quot;</span>, <span class="at">width=</span><span class="dv">600</span>, <span class="at">height=</span><span class="dv">400</span>)</span></code></pre></div>
+<p>Plotting this way keeps you from having to create and close a device
+manually. Depending on your personal preference this may also be
+considered as more ‘readable’ code.</p>
+<p>You can obtain the full list of included renderers with
+<code>ugd_renderers()</code>. (It’s growing with every
+<code>unigd</code> update!)</p>
+<p>The next section will illustrate how to access the render data
+directly without having to create a file.</p>
+</div>
+<div id="in-memory-render-access" class="section level2">
+<h2>In-memory render access</h2>
+<p>For some applications, you might want to access the rendered data
+directly. Example use-cases for this might be report generation, web
+services or interactive applications. While you can most likely think of
+workarounds for this issue, this <code>unigd</code> feature will
+certainly lower code complexity and increase performance.</p>
+<p>Rendering in-memory is done by simply calling
+<code>ugd_render(...)</code> instead of <code>ugd_save(...)</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>temp <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Temp</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">ugd</span>()</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">hist</span>(temp, <span class="at">col=</span><span class="st">&quot;darkblue&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>my_svg <span class="ot">&lt;-</span> <span class="fu">ugd_render</span>(<span class="at">as=</span><span class="st">&quot;svg&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="fu">cat</span>(my_svg) <span class="co"># Print the SVG as a string</span></span></code></pre></div>
+<p>Of course there is also a inline function for this:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>temp <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Temp</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>my_svg <span class="ot">&lt;-</span> <span class="fu">ugd_render_inline</span>({</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="fu">hist</span>(temp, <span class="at">col=</span><span class="st">&quot;darkblue&quot;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>}, <span class="at">as=</span><span class="st">&quot;svg&quot;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">cat</span>(my_svg) <span class="co"># Print the SVG as a string</span></span></code></pre></div>
+</div>
+<div id="more-unigd-features" class="section level2">
+<h2>More <code>unigd</code> features</h2>
+<p><code>unigd</code> offers a number of features which go beyond the
+base R graphics devices.</p>
+<div id="zoom" class="section level3">
+<h3>Zoom</h3>
+<p>All rendering function in <code>unigd</code> offer a
+<code>zoom</code> parameter. This parameter can be used to increase (or
+decrease) the size of objects inside a plot (independently of plot
+dimensions). For example <code>zoom=2</code> will increase the size of
+all objects to 200%, <code>zoom=0.5</code> will decrease them to
+50%.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>my_svg_1_0 <span class="ot">&lt;-</span> <span class="fu">ugd_render_inline</span>({</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">hist</span>(temp, <span class="at">col=</span><span class="st">&quot;darkblue&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Zoom 1.0&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>}, <span class="at">as=</span><span class="st">&quot;png-base64&quot;</span>, <span class="at">width=</span><span class="dv">300</span>, <span class="at">height=</span><span class="dv">300</span>, <span class="at">zoom=</span><span class="fl">1.0</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>my_svg_1_5 <span class="ot">&lt;-</span> <span class="fu">ugd_render_inline</span>({</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">hist</span>(temp, <span class="at">col=</span><span class="st">&quot;darkblue&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Zoom 1.5&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>}, <span class="at">as=</span><span class="st">&quot;png-base64&quot;</span>, <span class="at">width=</span><span class="dv">300</span>, <span class="at">height=</span><span class="dv">300</span>, <span class="at">zoom=</span><span class="fl">1.5</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>my_svg_0_5 <span class="ot">&lt;-</span> <span class="fu">ugd_render_inline</span>({</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="fu">hist</span>(temp, <span class="at">col=</span><span class="st">&quot;darkblue&quot;</span>, <span class="at">main =</span> <span class="st">&quot;Zoom 0.5&quot;</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>}, <span class="at">as=</span><span class="st">&quot;png-base64&quot;</span>, <span class="at">width=</span><span class="dv">300</span>, <span class="at">height=</span><span class="dv">300</span>, <span class="at">zoom=</span><span class="fl">0.5</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co"># (Output directly in this RMarkdown document)</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">raw_html</span>(<span class="fu">paste0</span>(<span class="fu">sprintf</span>(<span class="st">&quot;&lt;img src=</span><span class="sc">\&quot;</span><span class="st">%s</span><span class="sc">\&quot;</span><span class="st"> /&gt;&quot;</span>, <span class="fu">c</span>(my_svg_1_0, my_svg_1_5, my_svg_0_5))))</span></code></pre></div>
+<img src="data:image/png;base64,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" />
+<img src="data:image/png;base64,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" />
+<img src="data:image/png;base64,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" />
+</div>
+<div id="paging-by-index" class="section level3">
+<h3>Paging (by index)</h3>
+<p>The <code>page</code> parameter lets you select which plot should
+from the history should be rendered. By default this is set to
+<code>0</code> which will use the last created plot. Set this to any
+number ≥ 1 to select a plot by it’s index (oldest first). Use numbers ≤
+0 to select plots newest-first:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">ugd</span>()</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) {</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="dv">1</span>, <span class="at">main=</span><span class="fu">paste0</span>(<span class="st">&quot;Plot #&quot;</span>, i))</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>}</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;plot.png&quot;</span>, <span class="at">page =</span> <span class="dv">3</span>)  <span class="co"># Plot #3</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;plot.png&quot;</span>)            <span class="co"># Plot #10</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;plot.png&quot;</span>, <span class="at">page =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="co"># Plot #9</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="fu">dev.off</span>() </span></code></pre></div>
+<p>Note that plots can be deleted from the history the same way:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># ...</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">ugd_remove</span>()          <span class="co"># Remove last</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">ugd_remove</span>(<span class="at">page =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="co"># Remove second-to-last</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="fu">ugd_clear</span>()           <span class="co"># Remove all</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co"># ...</span></span></code></pre></div>
+<p>Instead of keeping track of the plot index, which might change when
+plots are added and removed, static plot IDs can be obtained.</p>
+</div>
+<div id="plot-ids" class="section level3">
+<h3>Plot IDs</h3>
+<p>If you want to render a plot at a later point without having to keep
+track of its index, you can obtain its ID at any point after it’s
+creation.</p>
+<p>The following example extensively demonstrates how this can be
+used:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">ugd</span>()</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">rnorm</span>(<span class="dv">50</span>))           <span class="co"># A</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>first_plot_id <span class="ot">&lt;-</span> <span class="fu">ugd_id</span>() <span class="co"># Get last ID (A at this point)</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rnorm</span>(<span class="dv">50</span>))           <span class="co"># B</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">sin</span>((<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)<span class="sc">/</span><span class="dv">3</span>))      <span class="co"># C</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>other_id <span class="ot">&lt;-</span> <span class="fu">ugd_id</span>(<span class="sc">-</span><span class="dv">1</span>)    <span class="co"># Get the second-to-last ID (B at this point)</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">runif</span>(<span class="dv">100</span>))          <span class="co"># D</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="fu">ugd_remove</span>(<span class="dv">3</span>)             <span class="co"># Remove 3rd plot (C)</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>first_again <span class="ot">&lt;-</span> <span class="fu">ugd_id</span>(<span class="dv">1</span>)  <span class="co"># Get the first ID (A)</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;plot_1.png&quot;</span>, <span class="at">page =</span> first_plot_id)</span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;plot_2.png&quot;</span>, <span class="at">page =</span> other_id)</span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;plot_3.png&quot;</span>, <span class="at">page =</span> first_again)</span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="fu">dev.off</span>() </span></code></pre></div>
+<p>Note that a typical use-case would be much simpler, and just be
+getting the last ID after each plot by calling <code>ugd_id()</code>
+subsequently.</p>
+</div>
+<div id="special-renderers" class="section level3">
+<h3>(Special) renderers</h3>
+<p><code>unigd</code> also ships with a number of ‘special’ renderers.
+This guide will not go into too much detail about this topic but here
+are some noteworthy mentions:</p>
+<ul>
+<li><code>&quot;strings&quot;</code>-renderer
+<ul>
+<li>All text elements inside a plot</li>
+<li>Linebreak separated plain text format</li>
+<li>Could be used to e.g. ‘search’ through plots</li>
+</ul></li>
+<li><code>&quot;meta&quot;</code>-renderer
+<ul>
+<li>Meta information about the plot</li>
+<li>Guaranteed to have a render time of O(1) regardless of number of
+objects</li>
+<li>Includes complexity (number of draw calls and clipping planes)</li>
+<li>JSON format</li>
+</ul></li>
+<li><code>&quot;json&quot;</code>-renderer
+<ul>
+<li>Contains <em>all</em> information <code>unigd</code> has about one
+plot</li>
+<li>JSON format</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="performance-considerations" class="section level2">
+<h2>Performance considerations</h2>
+<p>While <code>unigd</code> aims to provide the best performance in any
+case, there are some considerations you can make when optimizing
+graphics rendering.</p>
+<blockquote>
+<p>At this point it should be mentioned that for most user applications
+readability should be prioritized over performance and, unless graphics
+rendering is bottlenecking your R script, you can most likely ignore
+this section in good conscience.</p>
+</blockquote>
+<p>When optimizing rendering code, it is fundamental to understand in
+what cases <code>unigd</code> needs to call into the R graphics engine
+to let a plot be re-drawn:</p>
+<p>Rendering is done after drawing. The last drawn dimensions of a plot
+are cached. We can derive a few simple rules from this:</p>
+<ul>
+<li>Rendering the same plot in different formats: Fast.</li>
+<li>Rendering the same plot in different dimensions: Slow(er).</li>
+</ul>
+<p>This means ordering the rendering calls will result in faster
+execution:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># SLOWER:</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;my_plot1.png&quot;</span>, <span class="at">width=</span><span class="dv">600</span>, <span class="at">height=</span><span class="dv">400</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;my_plot2.pdf&quot;</span>, <span class="at">width=</span><span class="dv">300</span>, <span class="at">height=</span><span class="dv">300</span>) <span class="co"># re-draw 1</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;my_plot3.pdf&quot;</span>, <span class="at">width=</span><span class="dv">600</span>, <span class="at">height=</span><span class="dv">400</span>) <span class="co"># re-draw 2</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co"># FASTER:</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;my_plot1.png&quot;</span>, <span class="at">width=</span><span class="dv">600</span>, <span class="at">height=</span><span class="dv">400</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;my_plot3.pdf&quot;</span>, <span class="at">width=</span><span class="dv">600</span>, <span class="at">height=</span><span class="dv">400</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;my_plot2.pdf&quot;</span>, <span class="at">width=</span><span class="dv">300</span>, <span class="at">height=</span><span class="dv">300</span>) <span class="co"># re-draw 1</span></span></code></pre></div>
+<p>And, while <code>unigd</code> gives you the <em>choice</em> of
+specifying your render dimension <em>after</em> plotting, you can hint
+them at device creation time to achieve the best performance:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># SLOWER:</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">ugd</span>() <span class="co"># default dimensions: 720 * 576</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co"># ...</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;my_plot1.png&quot;</span>, <span class="at">width=</span><span class="dv">300</span>, <span class="at">height=</span><span class="dv">300</span>) <span class="co"># re-draw</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co"># FASTER:</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="fu">ugd</span>(<span class="at">width=</span><span class="dv">300</span>, <span class="at">height=</span><span class="dv">300</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co"># ...</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;my_plot1.png&quot;</span>, <span class="at">width=</span><span class="dv">300</span>, <span class="at">height=</span><span class="dv">300</span>)</span></code></pre></div>
+<p>If the dimensions are omitted when calling rendering functions, the
+last known dimensions will be used and rendering is guaranteed to be
+fast:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">ugd_save</span>(<span class="at">file=</span><span class="st">&quot;my_plot1.png&quot;</span>)</span></code></pre></div>
+<p>Any use of <code>ugd_*_inline</code> functions is also guaranteed to
+be fast.</p>
+<p>Note that width and height also interact with the <code>zoom</code>
+parameter. (i.e.: Cached width = width / zoom).</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
