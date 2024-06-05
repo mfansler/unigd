@@ -1,6 +1,6 @@
-cc226e0e12c4b01cc5c8dfd20e846a0a *DESCRIPTION
+6a1df04071df943cac682080c2218dd4 *DESCRIPTION
 a1e6b9e6c79e776d07bd319f02a8f0c5 *NAMESPACE
-1c5139e44ec49d9a14e0c97bd9fdc350 *NEWS.md
+fe14eae84b5211447042121b48b19a39 *NEWS.md
 adf5d5d3a07d05484a830e736562d0f1 *R/cpp11.R
 aec2173d02ff63f1ea8c54604e1df705 *R/fonts.R
 dee8ca1496599a118653441d347e6ed9 *R/testgraphic.R
@@ -12,8 +12,8 @@ ae72b5fe53742507adc2b0177a19e5b0 *build/vignette.rds
 bc7baead3b6080f04dc81efd2fe1ff39 *cleanup
 b0147f9f7f9a51d913eaefe40880c5a3 *configure
 d41d8cd98f00b204e9800998ecf8427e *configure.win
-de1ad2eff0f174a02d5320530fa049bf *inst/doc/a00_installation.Rmd
-5f8e7febb10527adb650eb567ec13617 *inst/doc/a00_installation.html
+92bb664d13113783eafeb1d68d97b33f *inst/doc/a00_installation.Rmd
+4e42a21b9da5593eafb4be59deb3fac7 *inst/doc/a00_installation.html
 57fcd73bfbb7608db64263adc2dfbf8e *inst/doc/b00_guide.R
 b365af08d7eb6609ec5594d034a56459 *inst/doc/b00_guide.Rmd
 ebd82526e09ef74f8b61079e2e2840d9 *inst/doc/b00_guide.html
@@ -44,7 +44,7 @@ f9405abe69f553ed1fc453ce3767def0 *man/unigd-package.Rd
 35ae2baa5af253fe103ab5d52a3b4970 *src/Makevars.ucrt
 34c8dddf834658b4d600b481a5977d0f *src/Makevars.win
 ed34bba7d459e7e4b158a3d0d6cc5711 *src/async_utils.h
-02512343dc1917c8cd0b5e44cd266015 *src/base_64.cpp
+0d438bcc1c2f7640a924933b37188c68 *src/base_64.cpp
 ea13857896ea641a981a251330d37839 *src/base_64.h
 66ce2b924ceee5c9190cf337f8ff0cd6 *src/compress.cpp
 e42ff66d986d08fbe24cb1f4c9b8e14c *src/compress.h
@@ -52,7 +52,7 @@ e5f61d2b68e8a9d7750a22cc4af23c6b *src/cpp11.cpp
 2a6bce9f4771aae08ab7d141c79e4bd6 *src/debug_print.h
 17b858a20e8e1e5934443068395bd23c *src/draw_data.cpp
 1f5b725ac17972ff3b0a2a89e2a5f881 *src/draw_data.h
-b573b763fe567d7dfc630bec8f38e95e *src/generic_dev.h
+44092f3f1f21b8cbb6ab3b66bf366dae *src/generic_dev.h
 67b1f98c962070e23abb06d557cf7d9a *src/geom.h
 79136e9134338361076466dda8466351 *src/lib/compat/optional.hpp
 87c0cc806bcfe21a2f434d57aa124e28 *src/lib/svglite_utils.h
@@ -83,7 +83,7 @@ d56a12e921dc10523b67f9e2abb9025c *src/renderers.cpp
 616dabe4918855a595e6a2eaf69c8e28 *src/unigd_commons.h
 693d80f9e384e4bfad8dc5da2b352773 *src/unigd_dev.cpp
 ba494292916b2728e59cc3bec1270a5d *src/unigd_dev.h
-d937d872ae27df9021137f63ee37a917 *src/unigd_external.cpp
+7882efac10b6747f5cef658817c8498a *src/unigd_external.cpp
 66ddfc357a9fa6a0b7d68848a9827ff6 *src/unigd_external.h
 161a69338307f24aa583f28bdaddd6e0 *src/unigd_version.h
 505b695bd35c25e78f82c1cd398cfd23 *src/uuid.cpp
@@ -109,5 +109,5 @@ e9e6f40531b17828bc4dcab161f4ca53 *tests/testthat/test-svglite-text.R
 9c93aebffa120aa99cf38000dd18128c *tests/testthat/test-tiff.R
 c3b0ec8ad56963dc641eb1d81c0fcc45 *tools/wincairo.R
 620353c1682242846277ea9e639f2597 *tools/winlibs.R
-de1ad2eff0f174a02d5320530fa049bf *vignettes/a00_installation.Rmd
+92bb664d13113783eafeb1d68d97b33f *vignettes/a00_installation.Rmd
 b365af08d7eb6609ec5594d034a56459 *vignettes/b00_guide.Rmd
